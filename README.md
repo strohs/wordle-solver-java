@@ -3,6 +3,8 @@ A command line wordle solver that uses information theory to solve a game of [wo
 It's inspired by [3Blue1Brown](https://www.youtube.com/watch?v=v68zYyaEmEA) and
 [Jon Gjenset's](https://www.youtube.com/watch?v=doFowk4xj7Q) YouTube videos on this topic.
 
+This solver is able to solve most challenges on turn 4, especially if you use a starting guess of "tares".
+
 ## Running
 This solver is a command line program that is used at the same time you are making guesses into the wordle web application.
 You make your first guess into the web app, and then enter that guess along with its corresponding "correctness" pattern
@@ -24,7 +26,7 @@ For example, suppose your first guess is "event" and wordle displayed the follow
 The final correctness pattern is `mwwwe`
 
 ### Example
-to run the solver you'll need to have installed Java 16 and maven.
+to run the solver you'll need to have installed Java 16 and Apache Maven.
 From the project's root directory run:
 
 > mvn clean compile exec:java
@@ -56,12 +58,13 @@ versus more obscure words like: `iller` or `jeely`.
 So the final formula to compute if a word, `w`, is the best guess is: 
 
 `BestWord = Pw * -Sum( Ppat * log2(Ppat) )`
-- `Pw` is the probability of a word occurring in general, (based on its frequency count data)
+- `Pw` is the probability of the word occurring in general, (based on its frequency count data)
 - `Ppat` is the probability of a wordle correctness pattern occurring (that could still potentially match `w`)
 
 
-After each guess, the algorithm removes any words and correctness patterns that could not possibly be a match based on all the guesses that
-have been made so far. This pruning step boosts performance the most as you could potentially be reducing your search space in half.
+After each guess, the algorithm removes any words and correctness patterns that could not possibly be a match based on 
+all the guesses that have been made so far. This pruning step boosts performance the most as you could potentially be 
+reducing a huge portion of your search space after every turn.
 
 
 ### Data files used
