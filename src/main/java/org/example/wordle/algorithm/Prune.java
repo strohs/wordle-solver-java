@@ -10,16 +10,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A wordle solver algorithm that prunes correctness patterns and dictionary words
+ * A wordle Guesser algorithm that prunes correctness patterns and dictionary words
  * that can no longer be valid at each iteration of a guess.
  */
 public class Prune implements Guesser {
 
-    // a dictionary of five letter words that maps a word to its occurrence count
-    private HashMap<String, Long> dictionary;
+    // a dictionary of five-letter words that maps a word to its occurrence count
+    private final HashMap<String, Long> dictionary;
 
     // a list of CorrectnessPatterns that are still "matchable" during a game of wordle
-    private List<CorrectnessPattern> patterns;
+    private final List<CorrectnessPattern> patterns;
 
 
     public Prune(HashMap<String, Long> dictionary) {
@@ -44,7 +44,7 @@ public class Prune implements Guesser {
             this.pruneRemaining(last);
         }
 
-        // hardcode first guess to "tares", it is the best starting guess
+        // hardcode first guess to "tares",as it is the best starting guess
         if (history.isEmpty()) {
             return "tares";
         } else {
@@ -60,7 +60,7 @@ public class Prune implements Guesser {
 
         // holds the best candidate word that was found
         Candidate best = null;
-
+        
         for (Map.Entry<String, Long> words : this.dictionary.entrySet()) {
             // sum of all: prob_of_a_pattern * prob_of_a_pattern.log2
             Double sum = 0.0;
@@ -71,6 +71,10 @@ public class Prune implements Guesser {
                 // sum of the count(s) of all words that match the pattern
                 Long inPatternTotal = 0L;
 
+                // given a particular candidate word, if we guess this word, what
+                // are the probabilities of getting each pattern. We sum together all those
+                // probabilities and use that to determine the entropy information amount from
+                // guessing that word.
                 for (Map.Entry<String, Long> candidates : this.dictionary.entrySet()) {
                     Guess g = new Guess(words.getKey(), pattern);
                     if (g.matches(candidates.getKey())) {
@@ -87,7 +91,7 @@ public class Prune implements Guesser {
             }
             // compute the probability of the current `word` using its occurrence `count`
             Double probWord = (double) words.getValue() / (double) remainingWordCount;
-            // the goodnees score of `word` a.k.a its entropy "bits"
+            // the goodness score of `word` a.k.a. its entropy "bits"
             Double goodness = probWord * -sum;
 
             if (best == null) {

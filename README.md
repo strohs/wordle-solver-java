@@ -3,14 +3,17 @@ A command line wordle solver that uses information theory to solve a game of [wo
 It's inspired by [3Blue1Brown](https://www.youtube.com/watch?v=v68zYyaEmEA) and
 [Jon Gjenset's](https://www.youtube.com/watch?v=doFowk4xj7Q) YouTube videos on this topic.
 
-This solver is able to solve most challenges on turn 4, especially if you use a starting guess of "tares".
+This project is a port of my [Rust wordle solver](https://github.com/strohs/wordle-solver-rust)
+
+This solver is able to solve most challenges on turn 4, especially if you use a starting guess of "tares" or "crate".
 
 ## Running
 This solver is a command line program that is used at the same time you are making guesses into the wordle web application.
-You make your first guess into the web app, and then enter that guess along with its corresponding "correctness" pattern
-into the wordle solver, separated by a space. 
+You make your first guess into the web app, and then switch over to this solver and enter that guess along with its 
+corresponding "correctness" pattern. 
 
-The correctness pattern is a five character string that represents the correctness of each letter of your guess as reported by wordle.
+The correctness pattern is a five character string that represents the correctness of each letter of your guess as shown
+in the wordle web application.
 It consists of the characters `c`,`m`, or `w`.
 - `c` a letter of the guess is in the **correct** position, the wordle web app shows these with a green background
 - `m` a letter of the guess is in the answer but is **misplaced**, or in the incorrect position, wordle shows these with a yellow background
@@ -26,7 +29,8 @@ For example, suppose your first guess is "event" and wordle displayed the follow
 The final correctness pattern is `mwwwe`
 
 ### Example
-to run the solver you'll need to have installed Java 16 and Apache Maven.
+To run the solver you'll need to have installed Java 16 and Apache Maven (at least version 3).
+
 From the project's root directory run:
 
 > mvn clean compile exec:java
@@ -58,7 +62,7 @@ versus more obscure words like: `iller` or `jeely`.
 So the final formula to compute if a word, `w`, is the best guess is: 
 
 `BestWord = Pw * -Sum( Ppat * log2(Ppat) )`
-- `Pw` is the probability of the word occurring in general, (based on its frequency count data)
+- `Pw` is the probability of the word occurring in general, (based on its occurrence count data)
 - `Ppat` is the probability of a wordle correctness pattern occurring (that could still potentially match `w`)
 
 
@@ -68,5 +72,5 @@ reducing a huge portion of your search space after every turn.
 
 
 ### Data files used
-`dictionary.txt` This file contains all the five-letter words used by wordle along with the "occurrence count" of that word.
-This data is taken from Google Books' [Ngram Viewer](https://storage.googleapis.com/books/ngrams/books/datasetsv3.html).
+`dictionary.txt` This file contains 12,947 five-letter words used by wordle along with the "occurrence count" of that 
+word. This data is taken from Google Books' [Ngram Viewer](https://storage.googleapis.com/books/ngrams/books/datasetsv3.html).

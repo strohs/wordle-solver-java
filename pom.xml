@@ -27,7 +27,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- we only use their List.cartesioanProduct implementation -->
+        <!-- we only use their List.cartesianProduct implementation -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
